@@ -53,4 +53,14 @@ export default class ValidaBookstore {
         expect(res.body).to.be.false;
     }
 
+    static validarGerarAutorizationUserVazio(res){
+        cy.contractValidation(res, 'account/authorization/post-authorization', 400)
+        expect(res.body.message).to.be.eq('UserName and Password required.')
+    }
+
+    static validarGerarAutorizationUserInexistente(res){
+        cy.contractValidation(res, 'account/authorization/post-authorization', 404)
+        expect(res.body.message).to.be.eq('User not found!')
+    }
+
 }

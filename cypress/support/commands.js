@@ -7,6 +7,7 @@ const ajv = new Ajv({allErrors: true, verbose: true, strict: false})
 const URL_ACCOUNT = "/Account/v1"
 
 
+
 /*----------- CONTRATO ------------- */
 Cypress.Commands.add('contractValidation', (res, schema, status) => {
 
@@ -50,11 +51,12 @@ Cypress.Commands.add('geraUserParaToken', () => {
         method: 'POST',
         url: URL_ACCOUNT + '/User',
         failOnStatusCode: false,
-        body: criaUser
+        body: criaUser,
+        
     }).then(() => {
         return{
             userName: criaUser.userName,
-            password: criaUser.password
+            password: criaUser.password,
         }
     })
 })
@@ -159,7 +161,7 @@ Cypress.Commands.add('gerarSenhaMenorOito', () => {
 })
 
 Cypress.Commands.add('salvarUserId', (res) => {
-    Cypress.env('userId', res.body.userID)
+    Cypress.env('userID', res.body.userID)
 })
 
 /*----------- ACCOUNT/GENERATETOKEN ------------- */
@@ -252,3 +254,59 @@ Cypress.Commands.add('geraAutorização', (userName, password) => {
     })
 })
 
+Cypress.Commands.add('geraAutorizaçãoSemUser', (password) => {
+
+    return cy.request({
+        method: 'POST',
+        url: URL_ACCOUNT + '/Authorized',
+        failOnStatusCode: false,
+        headers: {
+            'Accept': 'application/json'
+        },
+        body: {
+            "userName": "",
+            "password": password
+        }
+    })
+})
+
+Cypress.Commands.add('geraAutorizaçãoSemSenha', (userName) => {
+
+    return cy.request({
+        method: 'POST',
+        url: URL_ACCOUNT + '/Authorized',
+        failOnStatusCode: false,
+        headers: {
+            'Accept': 'application/json'
+        },
+        body: {
+            "userName": userName,
+            "password": ""
+        }
+    })
+})
+
+Cypress.Commands.add('geraAutorizationUserInexistente', () => {
+    let criaUser = gerarDados.criarUsuário()
+
+    return cy.request({
+        method: 'POST',
+        url: URL_ACCOUNT + '/Authorized',
+        failOnStatusCode: false,
+        body: criaUser
+    })
+})
+
+/*----------- ACCOUNT/USER/UUID ------------- */
+
+Cypress.Commands.add('buscaDetalhesUser', (userID) =>{
+
+    return cy.request({
+        method: 'GET',
+        url: URL_ACCOUNT + '/User/' + userID,
+        failOnStatusCode: false,
+        auth:{
+            bearer: Cypress.env('token')
+        }
+    })
+})
