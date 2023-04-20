@@ -30,7 +30,7 @@ Cypress.Commands.add('contractValidation', (res, schema, status) => {
 
 
 
-/*----------- ACCOUNT ------------- */
+/*----------- ACCOUNT/USERS ------------- */
 
 Cypress.Commands.add('geraUser', () => {
     let criaUser = gerarDados.criarUsuário()
@@ -43,6 +43,22 @@ Cypress.Commands.add('geraUser', () => {
     })
 })
 
+Cypress.Commands.add('geraUserParaToken', () => {
+    let criaUser = gerarDados.criarUsuário()
+
+    return cy.request({
+        method: 'POST',
+        url: URL_ACCOUNT + '/User',
+        failOnStatusCode: false,
+        body: criaUser
+    }).then(() => {
+        return{
+            userName: criaUser.userName,
+            password: criaUser.password
+        }
+    })
+})
+
 Cypress.Commands.add('geraUserExistente', () => {
 
     return cy.request({
@@ -50,11 +66,12 @@ Cypress.Commands.add('geraUserExistente', () => {
         url: URL_ACCOUNT + '/User',
         failOnStatusCode: false,
         body: {
-            "userName": "Isis",
-            "password": "Senha@01"
-          }
+            userName: "Isis",
+            password: "Senha@01"
+        }
     })
 })
+
 
 Cypress.Commands.add('geraUserSemUserName', () => {
 
@@ -80,7 +97,7 @@ Cypress.Commands.add('geraUserSemSenha', () => {
     })
 })
 
-// -------------- Validando senhas
+// -Validando senhas
 Cypress.Commands.add('gerarSenhaSemNúmero', () => {
 
     let senhaSemNum = gerarDados.criarSenhaSemNumero()
@@ -140,3 +157,98 @@ Cypress.Commands.add('gerarSenhaMenorOito', () => {
         body: senhaMenorOito
     })
 })
+
+Cypress.Commands.add('salvarUserId', (res) => {
+    Cypress.env('userId', res.body.userID)
+})
+
+/*----------- ACCOUNT/GENERATETOKEN ------------- */
+Cypress.Commands.add('salvarToken', (res) => {
+    Cypress.env('token', res.body.Token)
+})
+
+Cypress.Commands.add('geraToken', (userName, password) => {
+
+    return cy.request({
+        method: 'POST',
+        url: URL_ACCOUNT + '/GenerateToken',
+        failOnStatusCode: false,
+        body: {
+            "userName": userName,
+            "password": password
+        }
+    })
+})
+
+Cypress.Commands.add('geraTokenUserErrado', () => {
+
+    return cy.request({
+        method: 'POST',
+        url: URL_ACCOUNT + '/GenerateToken',
+        failOnStatusCode: false,
+        body: {
+            userName: "IsisUserErrado",
+            password: "Senha@01"
+        }
+    })
+})
+
+Cypress.Commands.add('geraTokenSenhaErrada', () => {
+
+    return cy.request({
+        method: 'POST',
+        url: URL_ACCOUNT + '/GenerateToken',
+        failOnStatusCode: false,
+        body: {
+            userName: "Isis",
+            password: "SenhaErrada@01"
+        }
+    })
+})
+
+
+//Nesses dois, coloquei o dado de usuário que já existe
+Cypress.Commands.add('geraTokenUserEmBranco', () => {
+
+    return cy.request({
+        method: 'POST',
+        url: URL_ACCOUNT + '/GenerateToken',
+        failOnStatusCode: false,
+        body: {
+            userName: "",
+            password: "Senha@01"
+        }
+    })
+})
+
+Cypress.Commands.add('geraTokenSenhaEmBranco', () => {
+
+    return cy.request({
+        method: 'POST',
+        url: URL_ACCOUNT + '/GenerateToken',
+        failOnStatusCode: false,
+        body: {
+            userName: "Isis",
+            password: ""
+        }
+    })
+})
+
+/*----------- ACCOUNT/AUTHORISATION ------------- */
+
+Cypress.Commands.add('geraAutorização', (userName, password) => {
+
+    return cy.request({
+        method: 'POST',
+        url: URL_ACCOUNT + '/Authorized',
+        failOnStatusCode: false,
+        headers: {
+            'Accept': 'application/json'
+        },
+        body: {
+            "userName": userName,
+            "password": password
+        }
+    })
+})
+

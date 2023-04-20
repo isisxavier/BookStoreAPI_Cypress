@@ -2,6 +2,8 @@ import { faker } from '@faker-js/faker';
 
 export default class gerarDados{
 
+    /*----------- ACCOUNT/USERS ------------- */
+
     static criarUsuário(){
         return{
             "userName":faker.internet.userName(),
@@ -12,7 +14,7 @@ export default class gerarDados{
     static criarUsuárioSemUserName(){
         return{
             "userName": "",
-            "password":faker.internet.password(6)+'@01'  
+            "password":faker.internet.password(6)+'aP@1'  
         }
     }
 
@@ -61,7 +63,7 @@ export default class gerarDados{
     }
 
     
-
+/*----------- ACCOUNT/AUTHORIZED ------------- */
     
 
 }
