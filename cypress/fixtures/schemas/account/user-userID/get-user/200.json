@@ -1,0 +1,21 @@
+{
+    "type": "object",
+    "required": [
+        "userId",
+        "username",
+        "books"
+    ],
+    "additionalProperties": true,
+    "properties": {
+        "userId": {
+            "type": "string"
+        },
+        "username": {
+            "type": "string"
+        },
+        "books": {
+            "type": "array",
+            "additionalItems": true
+        }
+    }
+}

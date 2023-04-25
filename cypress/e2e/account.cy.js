@@ -9,7 +9,6 @@ describe('Casos de teste sobre a rota /account/v1/Users da API Book Store', () =
       it('Cria usuário', () => {
         cy.geraUser().then(res => {
             ValidaBookstore.validaCriarUser(res)
-            cy.salvarUserId(res)
         })
       })
     })
@@ -174,10 +173,11 @@ describe('Casos de teste sobre a rota /account/v1/User/{UUID} da API Book Store'
   
         it('Buscar Usuário', () => {
             cy.geraUserParaToken().then(user => {
-                cy.salvarUserId(user.userID)
                 cy.geraToken(user.userName, user.password).then(() =>{
-                    cy.geraAutorização(user.userName, user.password).then((res) => {
-                        cy.buscaDetalhesUser(user.userID)
+                    cy.geraAutorização(user.userName, user.password).then(() => {
+                        cy.buscaDetalhesUser().then(res => {
+                            ValidaBookstore.validaBuscaUser(res)
+                        })
                     })
                 })
             })
@@ -186,6 +186,34 @@ describe('Casos de teste sobre a rota /account/v1/User/{UUID} da API Book Store'
 
     describe('Casos positivos de erro', () => {
 
-        
+        it('Deve dar erro quando o usuário não possuir token', () => {
+            cy.geraUserParaToken().then(() => {
+                        cy.buscaDetalhesUserSemToken().then(res => {
+                            ValidaBookstore.validaBuscaUserSemAutorization(res)
+                        })
+            })
+        })
+
+        it('Deve dar erro quando o usuário não possuir autorização', () => {
+            cy.geraUserParaToken().then(user => {
+                cy.geraToken(user.userName, user.password).then(() =>{
+                        cy.buscaDetalhesUser().then(res => {
+                            cy.log('está retornando undefined pq esse cenário deu sucesso, e no body de sucesso não existe uma propriedade "message"').then(() => {
+                                 ValidaBookstore.validaBuscaUserSemAutorization(res)
+                            })
+                        })
+                })
+            })
+        })
+
+        it('Deve dar erro quando for passado um userID inválido', () => {
+            cy.geraUserIDInvalido().then(user => {
+                cy.geraToken(user.userName, user.password).then(() =>{
+                        cy.buscaDetalhesUser().then(res => {
+                            ValidaBookstore.validaBuscaUserIDInvalido(res)
+                        })
+                })
+            })
+        })
     })
 })

@@ -1,0 +1,13 @@
+{
+    "type": "object",
+    "required": [
+        "books"
+    ],
+    "additionalProperties": true,
+    "properties": {
+        "books": {
+            "type": "array",
+            "additionalItems": true
+        }
+    }
+}

@@ -63,4 +63,75 @@ export default class ValidaBookstore {
         expect(res.body.message).to.be.eq('User not found!')
     }
 
+    /*----------- ACCOUNT/USER/UUID ------------- */
+
+    static validaBuscaUser(res){
+        cy.contractValidation(res, 'account/user-userID/get-user', 200)
+    }
+
+    static validaBuscaUserSemAutorization(res){
+        cy.contractValidation(res, 'account/user-userID/get-user', 401)
+        expect(res.body.message).to.be.eq('User not authorized!')
+    }
+
+    static validaBuscaUserIDInvalido(res){
+        cy.contractValidation(res, 'account/user-userID/get-user', 401)
+        expect(res.body.message).to.be.eq('User not found!')
+    }
+
+    static validaBuscaUserComLivro(res){
+        cy.contractValidation(res, 'account/user-userID/get-user', 200)
+        expect(res.body.books[0]).to.have.property('isbn')
+    }
+
+    static validaBuscaUserInvalidoComLivro(res){
+        cy.contractValidation(res, 'account/user-userID/get-user', 401)
+    }
+
+    /*----------- BOOKSTORE/BOOKS ------------- */
+
+    static validaBuscaDeLivros(res){
+        cy.contractValidation(res, 'bookstore/books/get-books', 200)
+    }
+
+    static validaCadastroLivroCarrinho(res){
+        cy.contractValidation(res, 'bookstore/books/post-books', 201)
+    }
+
+    static validaNaoCadastroLivrosNoCarrinho(res){
+        cy.contractValidation(res, 'bookstore/books/post-books', 401)
+        expect(res.body.message).to.be.eq('User not authorized!')
+    }
+
+    static validaCadastroLivrosUserInvalido(res){
+        cy.contractValidation(res, 'bookstore/books/post-books', 401)
+        expect(res.body.message).to.be.eq('User Id not correct!')
+    }
+
+    static validaIsbnInvalido(res){
+        cy.contractValidation(res, 'bookstore/books/post-books', 400)
+        expect(res.body.message).to.be.eq('ISBN supplied is not available in Books Collection!')
+    }
+
+    /*----------- BOOKSTORE/BOOK ------------- */
+
+    static validaDeletarLivro(res){
+        expect(res.status).to.equal(204);
+    }
+
+    static validaDeletarLivroSemAuth(res){
+        cy.contractValidation(res, 'bookstore/book/delete-book', 401)
+        expect(res.body.message).to.be.eq('User not authorized!')
+    }
+
+    static validaDeletarLivroUserInvalido(res){
+        cy.contractValidation(res, 'bookstore/book/delete-book', 401)
+        expect(res.body.message).to.be.eq('User Id not correct!')
+    }
+
+    static validaDeletarLivroInvalido(res){
+        cy.contractValidation(res, 'bookstore/book/delete-book', 400)
+        expect(res.body.message).to.be.eq("ISBN supplied is not available in User's Collection!")
+    }
+
 }

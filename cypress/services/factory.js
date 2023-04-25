@@ -2,7 +2,7 @@ import { faker } from '@faker-js/faker';
 
 export default class gerarDados{
 
-    /*----------- ACCOUNT/USERS ------------- */
+    /*----------- ACCOUNT/------------- */
 
     static criarUsuário(){
         return{
@@ -22,6 +22,12 @@ export default class gerarDados{
         return{
             "userName": faker.internet.userName(),
             "password":""
+        }
+    }
+
+    static geraUserIDAleatorio(){
+        return{
+           "userID": faker.datatype.uuid(),
         }
     }
 
@@ -63,7 +69,12 @@ export default class gerarDados{
     }
 
     
-/*----------- ACCOUNT/AUTHORIZED ------------- */
+    /*----------- BOOKSTORE/------------- */
     
+    static geraIsbnAleatorio(){
+        return{
+           "isbn": faker.datatype.number({ min: 10000000, max: 99999999 }),
+        }
+    }
 
 }
