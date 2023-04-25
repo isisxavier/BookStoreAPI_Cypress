@@ -140,28 +140,52 @@ describe('Casos de teste sobre a rota /account/v1/Authorized da API Book Store',
             })
         })
 
-        it.only('Deve retornar erro se o campo USERNAME estiver em branco', () => {
-            cy.geraUserSemUserName().then((user) => {
-                cy.geraAutorização(user.userName, user.password).then(res => {
-                    // ValidaBookstore.validarGerarAutorizationFalse(res)
+        it('Deve retornar erro se o campo USERNAME estiver em branco', () => {
+            cy.geraUserParaToken().then((user) => {
+                cy.geraToken(user.userName, user.password).then(() =>{
+                    cy.geraAutorizaçãoSemUser(user.password).then(res => {
+                        ValidaBookstore.validarGerarAutorizationUserVazio(res)
+                    })
                 })
             })
         })
 
-        it.only('Deve retornar erro se o campo PASSWORD estiver em branco', () => {
+        it('Deve retornar erro se o campo PASSWORD estiver em branco', () => {
             cy.geraUserParaToken().then((user) => {
-                cy.geraAutorização(user.userName, user.password).then(res => {
-                    ValidaBookstore.validarGerarAutorizationFalse(res)
+                cy.geraToken(user.userName, user.password).then(() =>{
+                    cy.geraAutorizaçãoSemSenha(user.userName).then(res => {
+                        ValidaBookstore.validarGerarAutorizationUserVazio(res)
+                    })
                 })
             })
         }) 
 
         it('Deve retornar erro se tentar gerar autorização para usuário inexistente', () => {
-            cy.geraUserParaToken().then((user) => {
-                cy.geraAutorização(user.userName, user.password).then(res => {
-                    ValidaBookstore.validarGerarAutorizationFalse(res)
-                })
+            cy.geraAutorizationUserInexistente().then(res => {
+                 ValidaBookstore.validarGerarAutorizationUserInexistente(res)
             })
         }) 
+    })
+})
+
+describe('Casos de teste sobre a rota /account/v1/User/{UUID} da API Book Store', () => {
+
+    describe('Casos positivos de sucesso.', () => {
+  
+        it('Buscar Usuário', () => {
+            cy.geraUserParaToken().then(user => {
+                cy.salvarUserId(user.userID)
+                cy.geraToken(user.userName, user.password).then(() =>{
+                    cy.geraAutorização(user.userName, user.password).then((res) => {
+                        cy.buscaDetalhesUser(user.userID)
+                    })
+                })
+            })
+        })
+    })
+
+    describe('Casos positivos de erro', () => {
+
+        
     })
 })
