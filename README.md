@@ -2,7 +2,7 @@
 Olá! Este é o repositório do projeto que desenvolvi com o objetivo de automatizar testes back-end da API Bookstore (https://bookstore.toolsqa.com/swagger/) para estudo de cypress e verificar o comportamento da aplicação em relação a uma variedade de cenários e entradas de dados. Eles cobrem os principais endpoints da API e testam a validação dos dados de entrada e saída usando o AJV. 
 <br>
 <br>
-A API Bookstore é uma aplicação de demonstração fornecida pela ToolsQA, que oferece endpoints para cadastrar usuário, e endpoints que engloba o gerenciamento dos cadastros dos livros para esses usuários.
+A API Bookstore é uma aplicação de demonstração fornecida pela ToolsQA, que oferece endpoints para cadastrar usuário, e endpoints que engloba o gerenciamento dos cadastros dos livros no "carrinho" desses usuários.
 <br>
 <br>
 <strong>Neste projeto os testes não estão cobertos 100%, a automação foi feita de acordo com as prioridades que separei relacionada ao fluxo principal da aplicaçao.</strong>
